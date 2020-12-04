@@ -1,14 +1,17 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm
 from django.contrib import messages
-from .models import Tag
+from .models import Post
 
 def post_list(request):
     return render(request, 'instagram/post_list.html')
 
-def post_detail(request):
-    pass
+def post_detail(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    return render(request, "instagram/post_detail.html", {
+        "post":post,
+    })
 
 @login_required
 def post_new(request):
@@ -21,7 +24,7 @@ def post_new(request):
             post.tag_set.add(*post.extract_tag_list()) # post.save()가 먼저 이뤄져야 한다. m2m 관계를 별도의 테이블에 저장하기 때문.
 
             messages.success(request, "포스팅을 저장했습니다.")
-            return redirect("/")
+            return redirect(post)
     else:
         form = PostForm()
     

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from .forms import PostForm
 from django.contrib import messages
 from .models import Post
@@ -32,6 +33,13 @@ def post_new(request):
         'form': form,
     })
     
+def user_page(request, username):
+    page_user = get_object_or_404(get_user_model(), username=username, is_active=True)
+    post_list = Post.objects.filter(author=page_user)
+    return render(request, 'instagram/user_page.html', {
+        "page_user":page_user,
+        "post_list":post_list,
+    })
 
 def post_update(request):
     pass

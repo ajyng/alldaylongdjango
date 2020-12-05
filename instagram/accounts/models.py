@@ -15,6 +15,8 @@ class User(AbstractUser):
 
     avatar = models.ImageField(blank=True, upload_to="accounts/avatar/%Y/%m/%d",
                                 help_text="48px * 48px 크기의 png/jpg 파일을 업로드 해주세요.")
+    follower_set = models.ManyToManyField("self", blank=True)
+    following_set = models.ManyToManyField("self", blank=True)
 
     @property
     def name(self):
@@ -26,6 +28,3 @@ class User(AbstractUser):
             return self.avatar.url
         else:
             return resolve_url("pydenticon_image", self.username)
-    
-    follower_set = models.ManyToManyField("self", blank=True)
-    following_set = models.ManyToManyField("self", blank=True)

@@ -5,6 +5,12 @@ from .forms import PostForm
 from django.contrib import messages
 from .models import Post
 
+@login_required
+def index(request):
+    return render(request, 'instagram/index.html', {
+
+    })
+
 def post_list(request):
     return render(request, 'instagram/post_list.html')
 
@@ -36,9 +42,12 @@ def post_new(request):
 def user_page(request, username):
     page_user = get_object_or_404(get_user_model(), username=username, is_active=True)
     post_list = Post.objects.filter(author=page_user)
+    post_list_count = post_list.count()
+
     return render(request, 'instagram/user_page.html', {
         "page_user":page_user,
         "post_list":post_list,
+        "post_list_count": post_list_count,
     })
 
 def post_update(request):

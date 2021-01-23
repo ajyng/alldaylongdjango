@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Axios from 'axios';
-import { Card, Alert, Form, Input, Button, Checkbox, notification } from 'antd';
-import { useHistory } from 'react-router-dom';
+import { Card, Form, Input, Button, notification } from 'antd';
+// import { useHistory } from 'react-router-dom';
 import { SmileOutlined, CrownOutlined } from '@ant-design/icons';
-import useLocalStorage from 'utils/useLocalStorage';
+
+import { setToken, useAppContext } from 'store';
 
 export default function Login() {
 
-    const history = useHistory();
+    const { dispatch } = useAppContext();
+    // const history = useHistory();
     const [fieldErrors, setFieldErrors] = useState({});
-    const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', "");
+    // const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', "");
 
     const onFinish = values => {
         async function fn() {
@@ -22,7 +24,7 @@ export default function Login() {
                 const response = await Axios.post("http://localhost:8000/accounts/token/", data);
 
                 const { data: { token: jwtToken } } = response;
-                setJwtToken(jwtToken);
+                dispatch(setToken(jwtToken));
 
                 notification.open({
                     message: "로그인 성공",
@@ -30,7 +32,7 @@ export default function Login() {
                 });
                 // history.push("/accounts/login"); // TODO
             }
-            catch(error) {
+            catch(error) { // 주어진 {username, password}에 매칭되는 유저가 없는 경우
                 notification.open({
                     message: "로그인 실패",
                     description: "아이디/암호를 확인해주세요.",
@@ -70,7 +72,7 @@ export default function Login() {
                 ]}
                 hasFeedback
                 {...fieldErrors.username}
-                {...fieldErrors.non_field_errors}
+                {...fieldErrors.non_field_errors} // {...fieldErrors.username}을 overwrite 해버린다
                 >
                     <Input />
                 </Form.Item>

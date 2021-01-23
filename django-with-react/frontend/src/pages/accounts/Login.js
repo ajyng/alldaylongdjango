@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
 import { Card, Form, Input, Button, notification } from 'antd';
-// import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { SmileOutlined, CrownOutlined } from '@ant-design/icons';
 
 import { setToken, useAppContext } from 'store';
@@ -9,9 +9,11 @@ import { setToken, useAppContext } from 'store';
 export default function Login() {
 
     const { dispatch } = useAppContext();
-    // const history = useHistory();
+    const history = useHistory();
+    const location = useLocation();
     const [fieldErrors, setFieldErrors] = useState({});
-    // const [jwtToken, setJwtToken] = useLocalStorage('jwtToken', "");
+
+    const { from: loginRedirectUrl } = location.state || { from: { pathname: "/" }};
 
     const onFinish = values => {
         async function fn() {
@@ -30,7 +32,7 @@ export default function Login() {
                     message: "로그인 성공",
                     icon: <SmileOutlined style={{ color: "#108ee9" }} />
                 });
-                // history.push("/accounts/login"); // TODO
+                history.push(loginRedirectUrl);
             }
             catch(error) { // 주어진 {username, password}에 매칭되는 유저가 없는 경우
                 notification.open({
@@ -72,12 +74,12 @@ export default function Login() {
                 ]}
                 hasFeedback
                 {...fieldErrors.username}
-                {...fieldErrors.non_field_errors} // {...fieldErrors.username}을 overwrite 해버린다
+                {...fieldErrors.non_field_errors}
                 >
                     <Input />
                 </Form.Item>
 
-                <Form.Item
+                <Form.Item 
                     label="Password"
                     name="password"
                     rules={[{ required: true, message: 'Please input your password!' }]}

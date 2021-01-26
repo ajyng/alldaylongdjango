@@ -4,6 +4,7 @@ import { Card } from 'antd';
 import Suggestion from './Suggestion';
 import useAxios from 'axios-hooks';
 import { useAppContext } from "store";
+import Axios from "axios";
 
 export default function SuggestionList({ style }) {
     const [ userList, setUserList ] = useState([]);
@@ -23,11 +24,19 @@ export default function SuggestionList({ style }) {
         }, [origUserList]);
     
     const onFollowUser = username => {
-        setUserList(prevUserList =>
-            prevUserList.map(user =>
-            user.username !== username ? user : { ...user, is_follow: true }
-            )
-        );
+        const data = { username };
+        const config = { headers };
+        Axios.post("http://localhost:8000/accounts/follow/", data, config)
+        .then(response => {
+            setUserList(prevUserList =>
+                prevUserList.map(user =>
+                user.username !== username ? user : { ...user, is_follow: true }
+                )
+            );
+        })
+        .catch(error => {
+            console.log(error);
+        });
     };
 
 

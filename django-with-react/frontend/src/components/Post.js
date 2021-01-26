@@ -3,7 +3,8 @@ import { Avatar, Card } from 'antd';
 import {HeartOutlined, UserOutlined} from '@ant-design/icons';
 
 function Post({ post }) {
-    const { photo, caption, location } = post;
+    const { author, caption, photo, location, tag_set, like_user_set } = post;
+    const { username, name, avatar_url } = author;
     return (
         <div>
             <Card
@@ -12,7 +13,12 @@ function Post({ post }) {
                 actions={[<HeartOutlined />]}
                 >
                 <Card.Meta
-                    avatar={<Avatar size="large" icon={<UserOutlined />} />}
+                    avatar={
+                        <Avatar size="large" icon = {
+                            <img src={`http://localhost:8000` + avatar_url} alt={username} />
+                            }
+                        />
+                    }
                     title={location}
                     description={caption}
                 />

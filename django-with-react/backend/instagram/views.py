@@ -8,7 +8,11 @@ from rest_framework.permissions import AllowAny
 from .serializers import PostSerializer
 
 class PostViewset(ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = (
+        Post.objects.all()
+        .select_related("author")
+        .prefetch_related("tag_set", "like_user_set")
+    )
     serializer_class = PostSerializer
     # permission_classes = [AllowAny] #fixme: 인증 적용
 

@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { Card, Form, Input, Button, notification } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { SmileOutlined, CrownOutlined } from '@ant-design/icons';
+import { parseErrorMessages } from "utils/forms";
 
 import { setToken, useAppContext } from 'store';
 
@@ -42,16 +43,8 @@ export default function Login() {
                 });
 
                 if (error.response) {
-                    const { data: fieldErrorMessage } = error.response;
-                    setFieldErrors(
-                        Object.entries(fieldErrorMessage).reduce( (acc, [fieldName, errors]) => {
-                            acc[fieldName] = {
-                                validateStatus: "error",
-                                help: errors.join(" "),
-                            }
-                            return acc;
-                        }, {})
-                    )
+                    const { data: fieldsErrorMessages } = error.response;
+                    setFieldErrors(parseErrorMessages(fieldsErrorMessages));
                 }
             }
         }

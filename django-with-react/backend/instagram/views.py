@@ -3,8 +3,11 @@ from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 from .models import Post
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from .serializers import PostSerializer
 
 class PostViewset(ModelViewSet):
@@ -15,6 +18,11 @@ class PostViewset(ModelViewSet):
     )
     serializer_class = PostSerializer
     # permission_classes = [AllowAny] #fixme: 인증 적용
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
 
     def get_queryset(self):
         # timesince = timezone.now() - timedelta(days=3)
@@ -29,3 +37,15 @@ class PostViewset(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
         return super().perform_create(serializer)
+
+    @action(detail=True, methods=['POST'])
+    def like(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.add(self.request.user)
+        return Response(status.HTTP_201_CREATED)
+
+    @like.mapping.delete
+    def unlike(self, request, pk):
+        post = self.get_object()
+        post.like_user_set.remove(self.request.user)
+        return Response(status.HTTP_204_NO_CONTENT)

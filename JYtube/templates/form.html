@@ -1,7 +1,10 @@
-<form action="" method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-    </table>
-    <input type="submit" />
-</form>
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <form action="" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input type="submit" class="btn btn-danger" />
+    </form>
+{% endblock %}

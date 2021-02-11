@@ -2,11 +2,29 @@
 {% load bootstrap4 %}
 
 {% block content %}
-    {% for video in video_list %}
-        <a href="{% url 'video:video_detail' video.pk %}">
-            {{ video.title }}
-        </a>
-    {% endfor %}
+    <div class="row">
+        {% for video in video_list %}
+            <div class="col-3 mb-3">
+                <div class="card">
+                    <img src="{{ video.photo.url }}" class="w-100" />
+                    <div class="card-body">
+                        <a href="{% url 'video:video_detail' video.pk %}" class="text-dark">
+                            <strong>{{ video.title }}</strong>
+                            <p class="small">
+                                {{ video.description|truncatechars:30 }}
+                            </p>
+                            <p class="text-gray small">
+                                {{ video.created_at|timesince }} 전,
+                                조회수 : {{ video.view_count }}
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    
     {% bootstrap_pagination page_obj %}
 
     <a href="{% url 'video:video_new' %}">업로드</a>

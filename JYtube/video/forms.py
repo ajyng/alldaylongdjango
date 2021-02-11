@@ -18,4 +18,7 @@ class VideoForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'rows':3}),
+        }

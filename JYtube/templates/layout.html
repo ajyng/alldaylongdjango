@@ -1,0 +1,30 @@
+{% load bootstrap4 %}
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>JY tube</title>
+
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    {% bootstrap_css %}
+    {% bootstrap_jquery %}
+    {% bootstrap_javascript %}
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <a href="{% url 'root' %}" class="navbar-brand">
+                <i class="fa fa-youtube-play text-danger mr-1"></i>
+                JY tube
+            </a>
+        </nav>
+
+        {% block content %}
+        {% endblock %}
+
+        &copy; 2021. Ahn Jun Young.
+    </div>
+</body>
+
+</html>

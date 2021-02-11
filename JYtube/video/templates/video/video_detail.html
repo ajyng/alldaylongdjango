@@ -1,3 +1,5 @@
 {{ video }}
 
-{% comment %} 현재 유튜브 21분 기준 정지 상황 {% endcomment %}
+<hr />
+<a href="{% url 'video:video_edit' video.pk %}">수정</a>
+<a href="{% url 'video:video_delete' video.pk %}">삭제</a>

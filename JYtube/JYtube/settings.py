@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third apps
+    'bootstrap4',
 
     # local apps
     'accounts',

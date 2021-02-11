@@ -1,5 +1,14 @@
-{% for video in video_list %}
-    <a href="{% url 'video:video_detail' video.pk %}">
-        {{ video.title }}
-    </a>
-{% endfor %}
+{% extends 'layout.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    {% for video in video_list %}
+        <a href="{% url 'video:video_detail' video.pk %}">
+            {{ video.title }}
+        </a>
+    {% endfor %}
+    {% bootstrap_pagination page_obj %}
+
+    <a href="{% url 'video:video_new' %}">업로드</a>
+    <hr />
+{% endblock %}
